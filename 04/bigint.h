@@ -67,6 +67,17 @@ public:
 			_bits[i] = other._bits[i];
 	}
 
+	BigInt& operator= (const BigInt& other) const
+	{
+		_power_of_base = other._power_of_base;
+		_base = other._base;
+		_bits_number = other._bits_number;
+		delete[] _bits;
+		_bits = new int32_t[_bits_number];
+		std::copy(other._bits, other._bits + _bits_number, _bits);
+		return *this;
+	}
+
 	BigInt operator + (const BigInt& other) const
 	{
 		// если складываются 2 положительных числа или 2 отрицательных числа 
