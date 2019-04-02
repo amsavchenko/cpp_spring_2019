@@ -36,12 +36,12 @@ public:
 	BigInt(int64_t number) 
 	// число хранится в системе счисления по основанию 10^9, порядок little-endian
 		: _power_of_base (9)
-		, _sign (sgn(number))
+		, _sign (static_cast<int8_t>(sgn(number)))
 	{
 		number = abs(number);
-		_base = pow(10, _power_of_base);
+		_base = static_cast<uint32_t>(pow(10, _power_of_base));
 		_bits_number = len_xbase(number);
-		_bits = new int_fast32_t[_bits_number];
+		_bits = new int32_t[_bits_number];
 
 		for (size_t i = 0; i < _bits_number; i++)
 		{
@@ -61,7 +61,7 @@ public:
 		, _sign (other._sign)
 		, _bits_number (other._bits_number)
 	{
-		_bits = new int_fast32_t[_bits_number];
+		_bits = new int32_t[_bits_number];
 
 		for (size_t i = 0; i < _bits_number; i++)
 			_bits[i] = other._bits[i];
@@ -128,8 +128,9 @@ public:
 			if (carry == 1) 	// если переполнение в самом старшем разряде, то придется вручную добавить новый разряд
 			{
 				BigInt temp2 = temp;
+				delete[] temp2._bits;
 				temp2._bits_number += 1;
-				temp2._bits = new int_fast32_t[temp2._bits_number];
+				temp2._bits = new int32_t[temp2._bits_number];
 				for (size_t i = 0; i < temp2._bits_number - 1; i++)
 					temp2._bits[i] = temp._bits[i];
 				temp2._bits[temp2._bits_number - 1] = 1;
@@ -199,7 +200,7 @@ public:
 	{
 		if (_sign != other._sign || _bits_number != other._bits_number)
 			return false;
-		int8_t i = _bits_number - 1;
+		int16_t i = _bits_number - 1;
 		while (i >= 0)
 		{
 			if (_bits[i] != other._bits[i])
@@ -236,7 +237,7 @@ public:
 				return true;
 		}
 		// если одинаковые знаки и количество блоков
-		int8_t i = _bits_number - 1;
+		int16_t i = _bits_number - 1;
 		while(i >= 0)
 		{
 			if (_bits[i] > other._bits[i])
@@ -282,10 +283,10 @@ public:
 
 private:
 	uint16_t _power_of_base;
-	int _base;
-	int _sign;
+	uint32_t _base;
+	int8_t _sign;
 	uint8_t _bits_number;
-	int_fast32_t *_bits;
+	int32_t *_bits;
 	
 
 	uint8_t len_xbase(int64_t num) // определяет сколько блоков bits поребуется для записи числа
