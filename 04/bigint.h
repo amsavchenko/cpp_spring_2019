@@ -67,7 +67,7 @@ public:
 			_bits[i] = other._bits[i];
 	}
 
-	BigInt& operator= (const BigInt& other) const
+	BigInt& operator= (const BigInt& other)
 	{
 		_power_of_base = other._power_of_base;
 		_base = other._base;
