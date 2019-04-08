@@ -37,7 +37,7 @@ int main()
     checkEqual(x.b, y.b);
     checkEqual(x.c, y.c);
 
-    /*auto s2 = std::stringstream("");
+    auto s2 = std::stringstream("");
     Deserializer d2(s2);
     checkTrue(d2.load(y) == Error::CorruptedArchive);
 
@@ -62,7 +62,7 @@ int main()
     checkEqual(y.a, 100);
     checkEqual(y.b, false);
     checkEqual(y.c, 500);
-     */
+    
     std::cout << "done" << std::endl;
     return 0;
 }

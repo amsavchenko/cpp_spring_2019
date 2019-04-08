@@ -1,12 +1,11 @@
 #ifndef _SERIALIZER_H_
 #define _SERIALIZER_H_
 
-//#inclide<iostream>
 
 enum class Error
 {
     NoError,
-    CorruptedArchieve
+    CorruptedArchive
 };
 
 class Serializer
@@ -24,7 +23,7 @@ public:
     }
     
     template <class ... Args>
-    Error operator() (Args&& ... args) // почему здесь не forward ссылка, а вообще по значению???
+    Error operator() (Args&& ... args)
     {
         return process(std::forward<Args>(args) ...);
     }
@@ -36,19 +35,19 @@ private:
     template <class T, class ... Args>
     Error process(T&& value, Args&& ... args)
     {
-        if(process(std::forward<T>(value)) == Error::CorruptedArchieve)
-            return Error::CorruptedArchieve;
+        if(process(std::forward<T>(value)) == Error::CorruptedArchive)
+            return Error::CorruptedArchive;
         else
             return process(std::forward<Args>(args) ...);
     }
     
-    Error process (bool value) // почему в этих process по значению передача??????
+    Error process (bool& value)
     {
         out_ << (value ? "true" : "false") << Separator;
         return Error::NoError;
     }
     
-    Error process (uint64_t value) // аналогично!!!
+    Error process (uint64_t& value)
     {
         out_ << value << Separator;
         return Error::NoError;
@@ -57,7 +56,7 @@ private:
     template <class T>
     Error process (T&& value)
     {
-        return Error::CorruptedArchieve;
+        return Error::CorruptedArchive;
     }
     
 };
@@ -91,8 +90,8 @@ private:
     template <class T, class ... Args>
     Error process (T&& value, Args&& ... args)
     {
-        if (process(std::forward<T>(value)) == Error::CorruptedArchieve)
-            return Error::CorruptedArchieve;
+        if (process(std::forward<T>(value)) == Error::CorruptedArchive)
+            return Error::CorruptedArchive;
         else
             return process(std::forward<Args>(args) ...);
     }
@@ -107,7 +106,7 @@ private:
         else if (str == "false")
             value = false;
         else
-            return Error::CorruptedArchieve;
+            return Error::CorruptedArchive;
         
         return Error::NoError;
     }
@@ -118,11 +117,10 @@ private:
         in_ >> str;
         
         if (str.empty() || str[0] == '-' || str[0] == '\0')
-            return Error::CorruptedArchieve;
+            return Error::CorruptedArchive;
         value = static_cast<uint64_t>(std::stoi(str));
         return Error::NoError;
     }
-    
     
 };
 
