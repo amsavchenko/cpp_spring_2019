@@ -19,6 +19,7 @@ struct Data
     }
 };
 
+
 int main()
 {
     Data x { 1, true, 2 };
@@ -62,7 +63,7 @@ int main()
     checkEqual(y.a, 100);
     checkEqual(y.b, false);
     checkEqual(y.c, 500);
-    
+
     std::cout << "done" << std::endl;
     return 0;
 }

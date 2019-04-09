@@ -118,7 +118,19 @@ private:
         
         if (str.empty() || str[0] == '-' || str[0] == '\0')
             return Error::CorruptedArchive;
-        value = static_cast<uint64_t>(std::stoi(str));
+        try
+        {
+            value = static_cast<uint64_t>(std::stoi(str));
+        }
+        catch(const std::invalid_argument& ia)
+        {
+            return Error::CorruptedArchive;
+        }
+        catch(const std::out_of_range& oor)
+        {
+            return Error::CorruptedArchive;
+        }
+       
         return Error::NoError;
     }
     
